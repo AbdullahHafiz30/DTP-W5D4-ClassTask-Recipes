@@ -22,7 +22,7 @@ class NetworkManager {
         let baseURL = "https://api.spoonacular.com/recipes/complexSearch"
 
         let parameters: [String: Any] = [
-            "apiKey": "aaa72630aee243578cac51fc5720f874",
+            "apiKey": "Put-Your-APIKEY-here",
             "query": query,
             "cuisine": cuisine,
             "number": 20
@@ -56,7 +56,7 @@ class NetworkManager {
     ) {
         let detailURL = "https://api.spoonacular.com/recipes/\(id)/information"
         let params: [String: Any] = [
-            "apiKey": "aaa72630aee243578cac51fc5720f874"
+            "apiKey": "Put-Your-APIKEY-here"
         ]
 
         AF.request(detailURL, method: .get, parameters: params)
