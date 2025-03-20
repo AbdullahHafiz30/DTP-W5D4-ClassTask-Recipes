@@ -9,9 +9,8 @@ import SwiftUI
 
 @main
 struct RecipesApp: App {
-    // We provide a single FavoritesManager for the entire app
     @StateObject var favoritesManager = FavoritesManager()
-    
+
     var body: some Scene {
         WindowGroup {
             MainTabView()

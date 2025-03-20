@@ -6,11 +6,6 @@
 //
 
 
-//
-//  APIFetchRecipesView.swift
-//  YourBurgerApp
-//
-
 import SwiftUI
 
 struct APIFetchRecipesView: View {
@@ -19,7 +14,7 @@ struct APIFetchRecipesView: View {
     var body: some View {
         NavigationView {
             VStack {
-                // A text field for the user’s search
+                // A text field for user’s search
                 TextField("Type a dish (e.g. 'burger')", text: $viewModel.searchText)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding(.horizontal)
@@ -36,7 +31,7 @@ struct APIFetchRecipesView: View {
 
                 // "Search" button
                 Button("Search") {
-                    viewModel.fetchRecipes()
+                    viewModel.searchRecipes()
                 }
                 .padding()
 
@@ -47,12 +42,13 @@ struct APIFetchRecipesView: View {
                         .padding(.horizontal)
                 }
 
-                // List of results
-                List(viewModel.recipes) { recipe in
-                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                // List of minimal search results
+                List(viewModel.results) { item in
+                    // item is a `SearchResult`
+                    // Tapping goes to a detail screen for that ID
+                    NavigationLink(destination: RecipeDetailView(recipeID: item.id)) {
                         HStack {
-                            // load the image
-                            AsyncImage(url: URL(string: recipe.image)) { phase in
+                            AsyncImage(url: URL(string: item.image)) { phase in
                                 switch phase {
                                 case .empty:
                                     ProgressView()
@@ -69,8 +65,7 @@ struct APIFetchRecipesView: View {
                             }
                             .frame(width: 60, height: 60)
 
-                            // show the title
-                            Text(recipe.title)
+                            Text(item.title)
                                 .font(.headline)
                         }
                     }
@@ -79,8 +74,8 @@ struct APIFetchRecipesView: View {
             .navigationTitle("Recipes")
         }
         .onAppear {
-            // If you want an initial fetch:
-            viewModel.fetchRecipes()
+            // initial search if you like
+            viewModel.searchRecipes()
         }
     }
 }

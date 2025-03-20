@@ -6,22 +6,12 @@
 //
 
 
-//
-//  RecipeViewModel.swift
-//  YourBurgerApp
-//
-
 import SwiftUI
 
 class RecipeViewModel: ObservableObject {
-    @Published var recipes: [RecipeData] = []
-
-    // NEW: The text field for user-typed query
+    @Published var results: [SearchResult] = []
     @Published var searchText: String = ""
-
-    // Let user pick a cuisine from a known list
     @Published var selectedCuisine: String = "American"
-
     @Published var errorMessage: String?
 
     let allCuisines: [String] = [
@@ -31,15 +21,15 @@ class RecipeViewModel: ObservableObject {
         "Mexican","Middle Eastern","Nordic","Southern","Spanish","Thai","Vietnamese"
     ]
 
-    func fetchRecipes() {
-        NetworkManager.shared.fetchRecipes(
-            query: searchText,       // user typed
-            cuisine: selectedCuisine // user picked
+    func searchRecipes() {
+        NetworkManager.shared.searchRecipes(
+            query: searchText,
+            cuisine: selectedCuisine
         ) { [weak self] result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let fetched):
-                    self?.recipes = fetched
+                    self?.results = fetched
                 case .failure(let error):
                     self?.errorMessage = "Error: \(error.localizedDescription)"
                 }
@@ -57,7 +47,6 @@ class RecipeViewModel: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let data):
-                    // For debugging
                     print("POST success:", String(data: data, encoding: .utf8) ?? "")
                 case .failure(let error):
                     self?.errorMessage = "POST error: \(error.localizedDescription)"

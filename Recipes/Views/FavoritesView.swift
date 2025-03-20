@@ -6,11 +6,6 @@
 //
 
 
-//
-//  FavoritesView.swift
-//  YourBurgerApp
-//
-
 import SwiftUI
 
 struct FavoritesView: View {
@@ -30,10 +25,10 @@ struct FavoritesView: View {
                 .padding()
                 .navigationTitle("Favorites")
             } else {
-                List(favoritesManager.favoriteRecipes) { recipe in
-                    NavigationLink(destination: RecipeDetailView(recipe: recipe)) {
+                List(favoritesManager.favoriteRecipes) { detail in
+                    NavigationLink(destination: RecipeDetailView(recipeID: detail.id)) {
                         HStack {
-                            AsyncImage(url: URL(string: recipe.image)) { phase in
+                            AsyncImage(url: URL(string: detail.image)) { phase in
                                 switch phase {
                                 case .empty:
                                     ProgressView()
@@ -49,8 +44,7 @@ struct FavoritesView: View {
                                 }
                             }
                             .frame(width: 60, height: 60)
-
-                            Text(recipe.title)
+                            Text(detail.title)
                                 .font(.headline)
                         }
                     }

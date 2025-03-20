@@ -7,11 +7,10 @@
 
 import Foundation
 
-
-// Each step
-struct InstructionStep: Decodable, Identifiable {
+struct InstructionStep: Codable, Identifiable, Hashable {
     let number: Int
     let step: String
 
     var id: Int { number }
 }
+

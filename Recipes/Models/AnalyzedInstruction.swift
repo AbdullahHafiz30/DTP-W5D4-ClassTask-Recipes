@@ -7,8 +7,8 @@
 
 import Foundation
 
-// Steps are inside "analyzedInstructions"
-struct AnalyzedInstruction: Decodable {
+struct AnalyzedInstruction: Codable {
     let steps: [InstructionStep]
 }
+
 

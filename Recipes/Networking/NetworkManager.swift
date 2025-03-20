@@ -6,11 +6,6 @@
 //
 
 
-//
-//  NetworkManager.swift
-//  YourBurgerApp
-//
-
 import Foundation
 import Alamofire
 
@@ -18,30 +13,61 @@ class NetworkManager {
     static let shared = NetworkManager()
     private init() {}
 
-    // MARK: - GET Request
-    func fetchRecipes(
-        query: String,                // user typed text
-        cuisine: String,             // user-chosen cuisine
-        completion: @escaping (Result<[RecipeData], Error>) -> Void
+    // MARK: - 1) GET minimal search results
+    func searchRecipes(
+        query: String,
+        cuisine: String,
+        completion: @escaping (Result<[SearchResult], Error>) -> Void
     ) {
         let baseURL = "https://api.spoonacular.com/recipes/complexSearch"
-        
-        // Provide your actual Spoonacular key:
+
         let parameters: [String: Any] = [
             "apiKey": "aaa72630aee243578cac51fc5720f874",
             "query": query,
             "cuisine": cuisine,
-            "instructionsRequired": true,
-            "fillIngredients": true,
-            "addRecipeInformation": true
+            "number": 20
+            // "instructionsRequired": true,  // optional
+            // "fillIngredients": false,
+            // "addRecipeInformation": false,
         ]
 
         AF.request(baseURL, method: .get, parameters: parameters)
+            .responseString { debugResponse in
+                if let error = debugResponse.error {
+                    print("Error from responseString:", error.localizedDescription)
+                }
+                print("RAW JSON (search):", debugResponse.value ?? "No response")
+            }
             .validate()
-            .responseDecodable(of: RecipeResponse.self) { response in
+            .responseDecodable(of: SearchResponse.self) { response in
                 switch response.result {
                 case .success(let data):
                     completion(.success(data.results))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+    }
+
+    // MARK: - 2) GET full recipe detail
+    func fetchRecipeDetail(
+        id: Int,
+        completion: @escaping (Result<RecipeDetail, Error>) -> Void
+    ) {
+        let detailURL = "https://api.spoonacular.com/recipes/\(id)/information"
+        let params: [String: Any] = [
+            "apiKey": "aaa72630aee243578cac51fc5720f874"
+        ]
+
+        AF.request(detailURL, method: .get, parameters: params)
+            .responseString { debugResponse in
+                print("RAW JSON (detail):", debugResponse.value ?? "No response")
+            }
+            .validate()
+            .responseDecodable(of: RecipeDetail.self) { response in
+                switch response.result {
+                case .success(let detail):
+                    completion(.success(detail))
                 case .failure(let error):
                     completion(.failure(error))
                 }

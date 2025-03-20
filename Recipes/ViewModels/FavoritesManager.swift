@@ -5,28 +5,22 @@
 //  Created by Abdullah Hafiz on 20/09/1446 AH.
 //
 
-
-//
-//  FavoritesManager.swift
-//  YourBurgerApp
-//
-
 import SwiftUI
 
 class FavoritesManager: ObservableObject {
-    @Published var favoriteRecipes: [RecipeData] = []
+    @Published var favoriteRecipes: [RecipeDetail] = []
 
-    func toggleFavorite(_ recipe: RecipeData) {
-        if favoriteRecipes.contains(recipe) {
+    func toggleFavorite(_ recipeDetail: RecipeDetail) {
+        if favoriteRecipes.contains(recipeDetail) {
             // remove if it exists
-            favoriteRecipes.removeAll { $0.id == recipe.id }
+            favoriteRecipes.removeAll(where: { $0.id == recipeDetail.id })
         } else {
             // add if it doesn’t
-            favoriteRecipes.append(recipe)
+            favoriteRecipes.append(recipeDetail)
         }
     }
 
-    func isFavorite(_ recipe: RecipeData) -> Bool {
-        favoriteRecipes.contains(recipe)
+    func isFavorite(_ recipeDetail: RecipeDetail) -> Bool {
+        favoriteRecipes.contains(recipeDetail)
     }
 }

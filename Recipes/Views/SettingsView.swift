@@ -6,11 +6,6 @@
 //
 
 
-//
-//  SettingsView.swift
-//  YourBurgerApp
-//
-
 import SwiftUI
 
 struct SettingsView: View {

@@ -7,10 +7,7 @@
 
 import Foundation
 
-// One ingredient
-struct ExtendedIngredient: Decodable, Identifiable {
+struct ExtendedIngredient: Codable, Identifiable {
     let id: Int
     let original: String
 }
-
-
